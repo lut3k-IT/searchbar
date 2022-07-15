@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import { useState } from 'react';
@@ -31,6 +30,8 @@ function App() {
           return prod;
         } else if (prod.title.toLowerCase().includes(inputVal.toLowerCase())) {
           return prod;
+        } else {
+          return;
         }
       }).map((prod) => {
         return <p key={prod.id}>{prod.title}</p>
