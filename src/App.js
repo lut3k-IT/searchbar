@@ -1,36 +1,39 @@
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import { useState } from 'react';
 
 function App() {
-  const fetchHandler = () => {
-    axios.get('https://dummyjson.com/products')// i left here
+  const [products, setProducts] = useState([]);
+  const [inputVal, setInputVal] = useState('');
+
+  const fetchHandler = e => {
+    e.preventDefault();
+
+    axios.get('https://dummyjson.com/products').then((req) => {
+      setProducts(req.data.products);
+    })
   }
 
-  const DUMMY_DATA = {
-    products: [
-      {
-        id: 1,
-        title: "iPhone 9",
-      },
-      {
-        id: 2,
-        title: "iPhone 8",
-      },
-      {
-        id: 3,
-        title: "iPhone 7",
-      }
-    ]
+  const searchHandler = e => {
+    setInputVal(e.target.value);
   }
 
   return (
     <form className="App" onSubmit={fetchHandler}>
-      <input type="text" placeholder='Search...' />
+      <a href="https://github.com/lut3k-IT/searchbar">My github code</a><br />
+
+      <input type="text" placeholder='Search...' value={inputVal} onChange={searchHandler} />
       <button type='submit'>Fetch</button>
 
-      {DUMMY_DATA.products.map((prod) => {
-        return <p>{prod.title}</p>
+      {products.filter((prod) => {
+        if (inputVal === '') {
+          return prod;
+        } else if (prod.title.toLowerCase().includes(inputVal.toLowerCase())) {
+          return prod;
+        }
+      }).map((prod) => {
+        return <p key={prod.id}>{prod.title}</p>
       })}
 
     </form>
